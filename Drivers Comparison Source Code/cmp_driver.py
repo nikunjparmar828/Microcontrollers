@@ -21,7 +21,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
     vel_enc_21 = []
     vel_enc_31 = []
 
-
     encoder_12 = []
     encoder_22 = []
     encoder_32 = []
@@ -53,15 +52,9 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
     time_t1 = 0
     time_t2 = 0
     time_t3 = 0
-
-
-
     sampling_period = 0.0002  # sampling_period of 200 microseconds
 
     ##-----------------------------------`----------------------------------------------------------------------------------------
-
-
-
     FILENAME_1 = f_path_1
     FILENAME_2 = f_path_2
     FILENAME_3 = f_path_3
@@ -94,9 +87,7 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
 
         time_t1 += sampling_period
 
-
     #remove initial zeros
-
     while True:
         for i in range(len(encoder_11)):
             if(encoder_11[0]==0):
@@ -140,7 +131,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
         time_t2 += sampling_period
 
     # remove initial zeros
-
     while True:
         for i in range(len(encoder_12)):
             if (encoder_12[0] == 0):
@@ -180,7 +170,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
             encoder_33.append(0)
         encoder_13.append(float(int(row[0]) * XY_axis_mm_per_count))
         encoder_23.append(float(int(row[1]) * XY_axis_mm_per_count))
-
         time_t3 += sampling_period
 
     # remove initial zeros
@@ -241,11 +230,8 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
 
     ##---------------------------------------------------------------------------------------------------------------------------
     # Plots Position and Velocity profiles for marlin and grbl
-#x_axis_v13, y_axis_t13,x_axis_p13, y_axis_tp13,x_axis_v23, y_axis_t23,,x_axis_p23, y_axis_tp23, cv3
 
     def compare(x_axis_v11, y_axis_t11, x_axis_v12, y_axis_t12, x_axis_p11, y_axis_tp11,x_axis_p12, y_axis_tp12,x_axis_v21, y_axis_t21, x_axis_v22, y_axis_t22, x_axis_p21, y_axis_tp21,x_axis_p22, y_axis_tp22, x_axis_v13, y_axis_t13,x_axis_p13, y_axis_tp13,x_axis_v23, y_axis_t23,x_axis_p23, y_axis_tp23, cv3,cv1, cv2):
-
-
         fig = make_subplots(rows=2, cols=2)
 
         fig.add_trace(
@@ -276,7 +262,7 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
             go.Scatter(x=y_axis_tp13,y=x_axis_p13[0:len(y_axis_tp13)], name="MST64"),
             row=1, col=2
         )
-    ###
+   
         fig.add_trace(
             go.Scatter(x=y_axis_t21, y=x_axis_v21,  name="MST16"),
             row=2, col=1
@@ -305,8 +291,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
             go.Scatter(x=y_axis_tp23,y=x_axis_p23[0:len(y_axis_tp23)], name="MST64"),
             row=2, col=2
         )
-
-
         fig['layout']['xaxis']['title'] = 'Time (sec)'
         fig['layout']['xaxis2']['title'] = 'Time (sec)'
         fig['layout']['yaxis']['title'] = 'Velocity (mm/sec) - enc1'
@@ -319,9 +303,7 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
         fig.write_html("/home/morphle/Encoder_Data/plots/Acc(%s)Vel(%s)pos(%s).html"%(acc, vel, d))
         # fig.show()
 
-
     ##---------------------------------------------------------------------------------------------------------------------------
-
 
     for i in range(len(encoder_11)):
 
@@ -361,7 +343,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
 
         if i < len(encoder_23) - 1:
             vel_enc_23.append((encoder_23[i + 1] - encoder_23[i]) / sampling_period)
-
 
 
     ##---------------------------------------------------------------------------------------------------------------------------
@@ -435,7 +416,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
         time_vel_enc_21.append(time_axis_1[j])
 
 ##------------
-
     #position enc12
     new_encoder_12 = []
     time_encoder_12 = []
@@ -466,7 +446,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
     for j in range((itr_num*group)+1, len(encoder_22)):
         new_encoder_22.append(encoder_22[j])
         time_encoder_22.append(time_axis_2[j])
-
 
     #Velocity  enc12
     new_vel_enc_12 = []
@@ -500,7 +479,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
         new_vel_enc_22.append(vel_enc_22[j])
         time_vel_enc_22.append(time_axis_2[j])
 ##---------
-
     #position enc13
     new_encoder_13 = []
     time_encoder_13 = []
@@ -640,8 +618,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
         CV_1 = '-'
         CV_2 = '-'
         CV_3 = '-'
-        ##    d1 = (d/2) + (5*t1)
-        ##    d2 = d - d1
     else:
         t1x = t1
         t1y = t2
@@ -653,9 +629,7 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
         CV_2 = round((np.std(vel_enc_12[start_1:end_1]) / (statistics.mean(vel_enc_12[start_1:end_1]))) * 100, 3)
         CV_3 = round((np.std(vel_enc_13[start_1:end_1]) / (statistics.mean(vel_enc_13[start_1:end_1]))) * 100, 3)
 
-
-
-            ##---------------------------------------------------------------------------------------------------------------------------
+##---------------------------------------------------------------------------------------------------------------------------
 
     # Ideal Value calculation - Y axis
     t = sampling_period
@@ -665,14 +639,10 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
 
     v2 = max_vy
     v3 = v2 - jy
-
     t32 = v3 / a  # t32 = t3-t2
-
     d3 = v3 * t32 - (0.5) * a * (t32 ** 2)
     d2 = dy - (d1 + d3)
-
     t2 = d2 / v2 + t1
-
     t_total = t2 + t32
     t2x = t1
     t2y = t2
@@ -700,13 +670,6 @@ def plots(f_path_1, f_path_2,f_path_3, acc, vel, d):
             exit()
 
         t_total = 2 * t1
-        ##    d1 = (d/2) + (5*t1)
-        ##    d2 = d - d1
 
 
-
-            ##---------------------------------------------------------------------------------------------------------------------------
-    #print curves
-
-#new_vel_enc_13, time_vel_enc_13[0:len(new_vel_enc_13)], new_encoder_13, time_encoder_13[0:len(new_encoder_13)],new_vel_enc_23, time_vel_enc_23[0:len(new_vel_enc_23)],new_encoder_23, time_encoder_23[0:len(new_encoder_23)],CV_3
     compare(new_vel_enc_11, time_vel_enc_11[0:len(new_vel_enc_11)], new_vel_enc_12, time_vel_enc_12[0:len(new_vel_enc_12)],  new_encoder_11, time_encoder_11[0:len(new_encoder_11)],new_encoder_12, time_encoder_12[0:len(new_encoder_12)], new_vel_enc_21, time_vel_enc_21[0:len(new_vel_enc_21)], new_vel_enc_22, time_vel_enc_22[0:len(new_vel_enc_22)], new_encoder_21, time_encoder_21[0:len(new_encoder_21)],new_encoder_22, time_encoder_22[0:len(new_encoder_22)], new_vel_enc_13, time_vel_enc_13[0:len(new_vel_enc_13)], new_encoder_13, time_encoder_13[0:len(new_encoder_13)],new_vel_enc_23, time_vel_enc_23[0:len(new_vel_enc_23)],new_encoder_23, time_encoder_23[0:len(new_encoder_23)],CV_3 ,CV_1, CV_2)
