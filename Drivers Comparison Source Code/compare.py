@@ -1,4 +1,4 @@
-# Author: DarkerKnight
+# Author: Nikunj Parmar, DarkerKnight
 # Plotting position, velocity and acceleration graphs for encoder data to analyse the motion profile
 # Encoder resolution = 2048 PPR, therefore CPR = 4 x PPR
 # mm per count = 1.7 microns
@@ -17,8 +17,6 @@ import glob
 import statistics
 
 def plots(f_path_g, f_path_m, acc, vel, d):
-
-
     # Data Buffers for Encoder readings, velocity and acceleration calculations
     #g - grbl
     #m - marlin
@@ -58,15 +56,9 @@ def plots(f_path_g, f_path_m, acc, vel, d):
 
     time_tg = 0
     time_tm = 0
-
-
-
     sampling_period = 0.0002  # sampling_period of 200 microseconds
 
     ##-----------------------------------`----------------------------------------------------------------------------------------
-
-
-
     FILENAME_g = f_path_g
     FILENAME_m = f_path_m
 
@@ -97,9 +89,7 @@ def plots(f_path_g, f_path_m, acc, vel, d):
 
         time_tg += sampling_period
 
-
     #remove initial zeros
-
     while True:
         for i in range(len(encoder_1g)):
             if(encoder_1g[0]==0):
@@ -141,8 +131,7 @@ def plots(f_path_g, f_path_m, acc, vel, d):
         encoder_2m.append(float(int(row[1]) * XY_axis_mm_per_count))
 
         time_tm += sampling_period
-
-
+        
     #remove initial zeros
 
     while True:
@@ -162,7 +151,6 @@ def plots(f_path_g, f_path_m, acc, vel, d):
         data_range_m = len(encoder_3m)
     else:
         data_range_m = len(encoder_2m)
-
 
     ##---------------------------------------------------------------------------------------------------------------------------
     # Position Graph
@@ -285,20 +273,6 @@ def plots(f_path_g, f_path_m, acc, vel, d):
     ##---------------------------------------------------------------------------------------------------------------------------
 
     # Velocity calculation GRBL
-    # for i in range(data_range_g):
-    #
-    #     if i < data_range_g - 1:
-    #         if z_axis:
-    #             vel_enc_3g.append((encoder_3g[i + 1] - encoder_3g[i]) / sampling_period)
-    #         else:
-    #             vel_enc_3g.append(0)
-    #         vel_enc_1g.append((encoder_1g[i + 1] - encoder_1g[i]) / sampling_period)
-    #         vel_enc_2g.append((encoder_2g[i + 1] - encoder_2g[i]) / sampling_period)
-    #     else:
-    #         vel_enc_3g.append(vel_enc_3g[i - 1])
-    #         vel_enc_1g.append(vel_enc_2g[i - 1])
-    #         vel_enc_2g.append(vel_enc_3g[i - 1])
-
     for i in range(len(encoder_1g)):
 
         if i < len(encoder_1g) - 1:
@@ -310,48 +284,8 @@ def plots(f_path_g, f_path_m, acc, vel, d):
         if i < len(encoder_2g) - 1:
             vel_enc_2g.append((encoder_2g[i + 1] - encoder_2g[i]) / sampling_period)
 
-    ##---------------------------------------------------------------------------------------------------------------------------
-
-    # Acceleration calculation GRBL
-    # for i in range(data_range_g):
-    #     if i < data_range_g - 1:
-    #         if z_axis:
-    #             acc_enc_3g.append((vel_enc_3g[i + 1] - vel_enc_3g[i]) / sampling_period)
-    #         else:
-    #             acc_enc_3g.append(0)
-    #         acc_enc_1g.append((vel_enc_1g[i + 1] - vel_enc_1g[i]) / sampling_period)
-    #         acc_enc_2g.append((vel_enc_2g[i + 1] - vel_enc_2g[i]) / sampling_period)
-    #     else:
-    #
-    #         acc_enc_3g.append(acc_enc_3g[i - 1])
-    #         acc_enc_1g.append(acc_enc_1g[i - 1])
-    #         acc_enc_2g.append(acc_enc_2g[i - 1])
-
-    # for i in range(len(encoder_1g)):
-    #     if i < len(encoder_1g) - 1:
-    #         acc_enc_1g.append((vel_enc_1g[i + 1] - vel_enc_1g[i]) / sampling_period)
-    #
-    # for i in range(len(encoder_2g)):
-    #     if i < len(encoder_2g) - 1:
-    #         acc_enc_2g.append((vel_enc_2g[i + 1] - vel_enc_2g[i]) / sampling_period)
-
-
-
-    ##---------------------------------------------------------------------------------------------------------------------------
+   ##---------------------------------------------------------------------------------------------------------------------------
     # Velocity calculation MARLIN
-    # for i in range(data_range_m):
-    #
-    #     if i < data_range_m - 1:
-    #         if z_axis:
-    #             vel_enc_3m.append((encoder_3m[i + 1] - encoder_3m[i]) / sampling_period)
-    #         else:
-    #             vel_enc_3m.append(0)
-    #         vel_enc_1m.append((encoder_1m[i + 1] - encoder_1m[i]) / sampling_period)
-    #         vel_enc_2m.append((encoder_2m[i + 1] - encoder_2m[i]) / sampling_period)
-    #     else:
-    #         vel_enc_3m.append(vel_enc_3m[i - 1])
-    #         vel_enc_1m.append(vel_enc_2m[i - 1])
-    #         vel_enc_2m.append(vel_enc_3m[i - 1])
 
     for i in range(len(encoder_1m)):
 
@@ -363,33 +297,6 @@ def plots(f_path_g, f_path_m, acc, vel, d):
 
         if i < len(encoder_2m) - 1:
             vel_enc_2m.append((encoder_2m[i + 1] - encoder_2m[i]) / sampling_period)
-
-    ##---------------------------------------------------------------------------------------------------------------------------
-
-    # Acceleration calculation MARLIN
-    # for i in range(data_range_m):
-    #     if i < data_range_m - 1:
-    #         if z_axis:
-    #             acc_enc_3m.append((vel_enc_3m[i + 1] - vel_enc_3m[i]) / sampling_period)
-    #         else:
-    #             acc_enc_3m.append(0)
-    #         acc_enc_1m.append((vel_enc_1m[i + 1] - vel_enc_1m[i]) / sampling_period)
-    #         acc_enc_2m.append((vel_enc_2m[i + 1] - vel_enc_2m[i]) / sampling_period)
-    #     else:
-    #
-    #         acc_enc_3m.append(acc_enc_3m[i - 1])
-    #         acc_enc_1m.append(acc_enc_1m[i - 1])
-    #         acc_enc_2m.append(acc_enc_2m[i - 1])
-
-
-    # for i in range(len(encoder_1m)):
-    #     if i < len(encoder_1m) - 1:
-    #         acc_enc_1m.append((vel_enc_1m[i + 1] - vel_enc_1m[i]) / sampling_period)
-    #
-    # for i in range(len(encoder_2m)):
-    #     if i < len(encoder_2m) - 1:
-    #         acc_enc_2m.append((vel_enc_2m[i + 1] - vel_enc_2m[i]) / sampling_period)
-
 
     ##---------------------------------------------------------------------------------------------------------------------------
     #Data striping
@@ -534,12 +441,6 @@ def plots(f_path_g, f_path_m, acc, vel, d):
     # a = 1
     # xxx = lfilter(b,a,vel_enc_1)
     ##yyy = lfilter(b,a,vel_enc_2)
-
-    # # velocity_plot(time_axis, vel_enc_1, time_axis[0:data_range+1], idl_val_velo_1)
-    # position_plot(time_axis, encoder_1, time_axis[0:data_range],idl_val_dis_1 )
-    #
-    # # velocity_plot(time_axis, vel_enc_2, time_axis[0:data_range2+1], idl_val_velo_2)
-    # position_plot(time_axis, encoder_2, time_axis[0:data_range2],idl_val_dis_2 )
 
     time_axis = []
 
