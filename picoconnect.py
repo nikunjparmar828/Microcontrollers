@@ -19,13 +19,7 @@ try:
     time.sleep(1/1000)
         
     print(data_array)    
-    #for i in data_array:
-    #    logging.info(i + '\n')
-    #    time.sleep(1/1000)
-        
-        #with open("dataencoder.txt", "w") as txt_file:
-            #for line in data_array:
-                #txt_file.write(line)
+
 except IOError:
     print("port is used by another application")
     exit()
