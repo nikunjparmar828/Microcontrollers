@@ -2,10 +2,7 @@ import serial
 import time
 import datetime
 import logging
-
-
-
-    
+  
 FILENAME = '/home/pi/Desktop/' + str(datetime.datetime.now()) + '.log'
 logging.basicConfig(filename=FILENAME,
                     level=logging.DEBUG,
@@ -23,60 +20,28 @@ with serial.Serial('/dev/ttyACM1', timeout=1) as ser1:
 ser.open()
 time.sleep(2)
 
-ser.write(b'$X\n')
+ser.write(b'$X\n') # Turn on the machine 
 time.sleep(2)
 
-ser.write(b'M7\n')
+ser.write(b'M7\n') # Initialization of the machine 
 time.sleep(2)
 
 ser1.open()
 time.sleep(1)
-
-ser.write(b'$HX\n')
+ser.write(b'$HX\n') 
 time.sleep(10)
-#ser.write(b'$HY\n')
-#time.sleep(10)
-#ser.write(b'$HZ\n')
-#time.sleep(10)
-
 
 ser1.write(b'a\n')
 time.sleep(2)
 
 ser1.write(b'b\n')
-
 ser.write(b'X168\n')
-
-#ser.write(b'X0\n')
-
 
 ser1.write(b'c\n')
 
 for i in range(0,20000):
-    
-    #print(ser1.readline())
     logging.info(ser1.readline())
-    #arr = ser1.readline()
-    #print(ser1.readline())
     time.sleep(1/1000)
-
-#reverse motion data collection
-
-#time.sleep(10)
-
-#ser.write(b'Z-0\n')
-#ser1.write(b'b\n')
-#time.sleep(10)
-
-#ser1.write(b'c\n')
-
-#for i in range(0,10000):
-    
-    #print(ser1.readline())
-#    logging.info(ser1.readline())
-  #  arr = ser1.readline()
- #   print(ser1.readline())
-#    time.sleep(1/1000)
     
 ser.write(b'M9\n')
 
