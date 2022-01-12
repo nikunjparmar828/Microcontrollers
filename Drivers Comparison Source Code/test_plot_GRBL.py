@@ -1,15 +1,14 @@
-# Author: DarkerKnight
+# Author: Nikunj Parmar, DarkerKnight
 # Plotting position, velocity and acceleration graphs for encoder data to analyse the motion profile
 # Encoder resolution = 2048 PPR, therefore CPR = 4 x PPR
 # mm per count = 1.7 microns
 
 import matplotlib.pyplot as plt
-# from scipy.signal import lfilter
-# import numpy as np
-# from numpy import ndarray
-# import csv
+from scipy.signal import lfilter
+import numpy as np
+from numpy import ndarray
+import csv
 import math
-
 
 # Data Buffers for Encoder readings, velocity and acceleration calculations
 
@@ -33,7 +32,6 @@ Z_lead_screw_pitch = 8
 XY_axis_mm_per_count = XY_lead_screw_pitch / encoder_CPR_res
 z_axis_mm_per_count = Z_lead_screw_pitch / (encoder_CPR_res * lever_reduction)
 time_t = 0
-
 
 sampling_period = 0.0002  # sampling_period of 200 microseconds
 
@@ -63,10 +61,6 @@ if (d > 0):
     dx = (math.cos(math.radians(theta))) * d
     dy = (math.sin(math.radians(theta))) * d
 
-#
-# dx = 24.073 # X position in mm
-# dy = 31.945 # Y position in mm
-
 if (dx != 0 and dy != 0):
 
     theta_rad = math.atan(dx / dy)
@@ -83,8 +77,6 @@ else:
 
 idl_val_velo_1 = []
 idl_val_dis_1 = []
-
-
 t1 = max_vx/a
 d1 = (0.5)*a*(t1**2)
 
@@ -112,7 +104,6 @@ if dx>(2*d1): ##Trapezoidal curve
         s = d_x + (max_vx * t)
         idl_val_dis_1.append(s)
         t = t + 0.0002
-
 
     v0 = a * t_total
     tt = sampling_period
@@ -163,11 +154,8 @@ else: ## Triangular curve for d<2*d1
 
 #Ideal Value calculation - Y axis
 
-
 idl_val_velo_2 = []
 idl_val_dis_2 = []
-
-
 t1 = max_vy/a
 d1 = (0.5)*a*(t1**2)
 
@@ -195,8 +183,6 @@ if dy>(2*d1): ##Trapezoidal curve
         s = d_x + (max_vy * t)
         idl_val_dis_2.append(s)
         t = t + 0.0002
-
-
     v0 = a * t_total
     tt = sampling_period
     s0 = s
@@ -241,9 +227,7 @@ else: ## Triangular curve for d<2*d1
         t = t + 0.0002
         tt = tt + 0.0002        
     
-
 ##---------------------------------------------------------------------------------------------------------------------------
-
 # To remove the blank lines from the file and write the data to a .txt file
 with open(r'/home/morphle/Desktop/X%s.log'%(d)) as infile, open(
         r'/home/morphle/Desktop/Xnew%s.log'%(d), 'w') as outfile:
@@ -271,11 +255,6 @@ if z_axis:
 else:
     data_range = len(encoder_2)
 
-
-# Round off error calculation for distance
-# recorded_distance_travelled = encoder_2[data_range-1]
-# round_off_error_distance_travelled = expected_distance_travelled - recorded_distance_travelled
-
 ##---------------------------------------------------------------------------------------------------------------------------
 # Position Graph
 
@@ -288,24 +267,16 @@ def position_plot(x_axis, y_axis, x_axis_idl, y_axis_idl):
     plt.grid(color='black', linestyle='--', linewidth=1)
     plt.show()
 ##---------------------------------------------------------------------------------------------------------------------------
-
 # Plots Velocity Profile
-
 def velocity_plot(x_axis, y_axis, x_axis_idl, y_axis_idl):
     plt.title('Velocity Profile')
     plt.xlabel('Time (seconds)')
     plt.ylabel('Velocity(mm/s)')
     plt.plot(x_axis, y_axis, 'tab:green')
-    # plt.plot(x_axis_idl, y_axis_idl, 'tab:red')
-##    plt.plot([0,0.008333], [0, 83.33], 'tab:red')
-##    plt.plot([0.008333,0.32733], [83.33,83.33], 'tab:red')
-##    plt.plot([0.32733, 0.336], [83.33, 0], 'tab:red')
     plt.grid(color='black', linestyle='--', linewidth=1)
     plt.show()
 ##---------------------------------------------------------------------------------------------------------------------------
-
 # Plots Acceleration Profile
-
 def acceleration_plot(x_axis, y_axis):
     plt.title('Acceleration Profile')
     plt.xlabel('Time (seconds)')
@@ -316,8 +287,6 @@ def acceleration_plot(x_axis, y_axis):
 
 ##---------------------------------------------------------------------------------------------------------------------------
 # Plots all Position, Velocity and Acceleration plots for both the encoder
-
-
 def side_by_side_plot(x_axis, y_axis_00, y_axis_01, y_axis_02, y_axis_10, y_axis_11, y_axis_12, y_axis_20, y_axis_21,
                       y_axis_22):
     fig, axs = plt.subplots(3, 3)
@@ -365,7 +334,6 @@ def side_by_side_plot(x_axis, y_axis_00, y_axis_01, y_axis_02, y_axis_10, y_axis
 
     plt.show()
 ##---------------------------------------------------------------------------------------------------------------------------
-
 # Velocity calculation
 for i in range(data_range):
 
@@ -381,7 +349,6 @@ for i in range(data_range):
         vel_enc_1.append(vel_enc_2[i - 1])
         vel_enc_2.append(vel_enc_3[i - 1])
 ##---------------------------------------------------------------------------------------------------------------------------
-
 # Acceleration calculation
 for i in range(data_range):
     if i < data_range - 1:
@@ -398,103 +365,11 @@ for i in range(data_range):
         acc_enc_2.append(acc_enc_2[i - 1])
 
 ##---------------------------------------------------------------------------------------------------------------------------
-
-#save data and differences
-        
-
-
-
-##def merge(list1, list2, list3, list4, list5):
-##      
-##    merged_list = [[list1[i], list2[i], list3[i], list4[i], list5[i], list4[i]-list2[i], list5[i]-list3[i]] for i in range(0, len(list4))]
-##    return merged_list
-##
-##merged = merge(time_axis, encoder_1, encoder_2, idl_val_dis_1, idl_val_dis_2)
-##
-##
-##with open(r'C:\Users\Nikunj Parmar\Desktop\result.csv', 'w') as f:
-##
-##    f.write("time \t pos_x \t pos_y \t idl_pos_x \t idl_pos_y \t diff_x \t diff_y \n ")
-##
-##    for item in merged:       
-##        f.write("%s\t" % round(float(item[0]), 6))
-##        f.write("%s\t" % round(float(item[1]), 6))
-##        f.write("%s\t" % round(float(item[2]), 6))
-##        f.write("%s\t" % round(float(item[3]), 6))
-##        f.write("%s\t" % round(float(item[4]), 6))
-##        f.write("%s\t" % round(float(item[5]), 6))
-##        f.write("%s\n" % round(float(item[6]), 6))
-##
-
-
-##---------------------------------------------------------------------------------------------------------------------------
 #print curves
 data_range = len(idl_val_dis_1)
 data_range2 = len(idl_val_dis_2)
-
-# n = 60  # the larger n is, the smoother curve will be
-# b = [1.0 / n] * n
-# a = 1
-# xxx = lfilter(b,a,vel_enc_1)
-# yyy = lfilter(b,a,vel_enc_2)
 
 velocity_plot(time_axis, vel_enc_1, time_axis[0:data_range], idl_val_velo_1)
 # position_plot(time_axis, encoder_1, time_axis[0:data_range],idl_val_dis_1 )
 velocity_plot(time_axis, vel_enc_2, time_axis[0:data_range2], idl_val_velo_2)
 # position_plot(time_axis, encoder_2, time_axis[0:data_range2],idl_val_dis_2 )
-
-##---------------------------------------------------------------------------------------------------------------------------
-
-#curve smoothness
-
-#lfilter 
-##n = 15  # the larger n is, the smoother curve will be
-##b = [1.0 / n] * n
-##a = 1
-##yy = lfilter(b,a,vel_enc_1)
-##velocity_plot(time_axis, yy)
-
-#writing filtered array into a file
-
-##a_file = open(r"C:\Users\Nikunj Parmar\Desktop\X20filtered.log", "w")
-##ndarray.tofile(a_file, sep="\n", format="%s")
-
-#yyy = lfilter(b,a,acc_enc_1)
-#acceleration_plot(time_axis, yyy)
-# side_by_side_plot(time_axis, encoder_1, encoder_2, encoder_3, vel_enc_1, vel_enc_2, vel_enc_3, acc_enc_1, acc_enc_2, acc_enc_3)
-
-
-##---------------------------------------------------------------------------------------------------------------------------
-
-
-##motor_time_per_step = 52.5 #micro secs
-##samp_p = 200 # sampling period in microsecs
-##enc_res_per_motor_step = 2.56 # for 3200 encoder resolution is 8192
-##ideal_count = (28/14)*8192 # for two revolutions
-##count = 1
-##enc_1_theo_val = []
-##theo_vel_enc_1 = []
-##
-###ideal position calculation
-##
-##while True:
-##    idl_val = round(((count * samp_p)/motor_time_per_step )* enc_res_per_motor_step)
-##    if idl_val > ideal_count:
-##        break
-##    count = count+1
-##    enc_1_theo_val.append(float(idl_val * XY_axis_mm_per_count))
-##
-###ideal velocity calculation
-##
-##for i in range(len(enc_1_theo_val)):
-##    if i < len(enc_1_theo_val) - 1:
-##        theo_vel_enc_1.append((enc_1_theo_val[i + 1] - enc_1_theo_val[i]) / sampling_period)
-##    else:
-##        theo_vel_enc_1.append(theo_vel_enc_1[i - 1])
-
-##with open(r'C:\Users\Nikunj Parmar\Desktop\theo_vel.txt', 'w') as f:
-##    for item in theo_vel_enc_1:
-##        f.write("%s\n" % item)
-##        
-##position_plot(time_axis[0:1680], enc_1_theo_val)
-##velocity_plot(time_axis[0:1680], theo_vel_enc_1)
