@@ -1,4 +1,4 @@
-# Author: DarkerKnight
+# Author: Nikunj Parmar, DarkerKnight
 # Plotting position, velocity and acceleration graphs for encoder data to analyse the motion profile
 # Encoder resolution = 2048 PPR, therefore CPR = 4 x PPR
 # mm per count = 1.7 microns
